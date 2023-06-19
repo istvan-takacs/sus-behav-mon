@@ -2,7 +2,7 @@ import time
 import subprocess
 import select
 
-f = subprocess.Popen(['tail','-F',log.txt],\
+f = subprocess.Popen(['tail','-F',"-n", "5", "/var/log/syslog"],\
         stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 p = select.poll()
 p.register(f.stdout)
