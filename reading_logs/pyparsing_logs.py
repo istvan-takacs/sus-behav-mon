@@ -25,7 +25,8 @@ class Parser(object):
         hostname = Word(alphas + nums + "_-.")
 
         # appname
-        appname = Word(alphas + "/-_.()1234567890@[]")("appname") + (Suppress("[") + ints("pid") + Suppress("]")) | (Word(alphas + "/-_.1234567890@[]")("appname"))
+       
+        appname = (Word(alphas + "/-_.()1234567890@:]")("appname") + (Suppress("[") + ints("pid") + Suppress("]"))) | (Word(alphas + "/-_.1234567890@[")("appname"))
         appname.setName("appname")
 
         # message
@@ -49,7 +50,8 @@ class Parser(object):
 def main():
   valid_log_lines = []
   invalid_log_lines = []
-  with open("/home/istvan/Desktop/sus-behav-mon/reading_logs/syslog", "r") as myfile:
+  # with open("/home/istvan/Desktop/sus-behav-mon/reading_logs/syslog", "r") as myfile:
+  with open("/var/log/syslog", "r") as myfile:
       data = myfile.read()
       parser = Parser()
       for line in data.splitlines():
@@ -59,10 +61,13 @@ def main():
                 invalid_log_lines.append(line)  
               else:
                 valid_log_lines.append(log_dict)
-  print(len(valid_log_lines))
+  # print((valid_log_lines))
+  # print((len(invalid_log_lines)))
+  return valid_log_lines
 
-  print(len(invalid_log_lines))
 
+
+  # print(valid_log_lines[-5])
 if __name__ == "__main__":
 
     main()
