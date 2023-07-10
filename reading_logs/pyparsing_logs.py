@@ -9,9 +9,6 @@ class Parser(object):
     def __init__(self):
         ints = Word(nums)
 
-        # priority
-       # priority = Suppress("<") + ints + Suppress(">")
-
         # timestamp
         month = Word(string.ascii_uppercase, string.ascii_lowercase, exact=3)
         day   = ints
@@ -47,27 +44,26 @@ class Parser(object):
         return parsed.asDict()
   
 
-def main():
+def pyparse_logs():
   valid_log_lines = []
   invalid_log_lines = []
-  # with open("/home/istvan/Desktop/sus-behav-mon/reading_logs/syslog", "r") as myfile:
+
   with open("/var/log/syslog", "r") as myfile:
-      data = myfile.read()
+      data_sys = myfile.read()
       parser = Parser()
-      for line in data.splitlines():
+      for line in data_sys.splitlines():
               try:
                 log_dict = parser.parse(line)
               except:
                 invalid_log_lines.append(line)  
               else:
                 valid_log_lines.append(log_dict)
-  # print((valid_log_lines))
-  # print((len(invalid_log_lines)))
+  
+  
   return valid_log_lines
-
 
 
   # print(valid_log_lines[-5])
 if __name__ == "__main__":
 
-    main()
+    pyparse_logs()
