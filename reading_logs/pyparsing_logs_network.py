@@ -26,7 +26,7 @@ class Parser(object):
         return parsed.asDict()
 
 
-def pyparse_logs_network():
+def pyparse_logs():
   valid_log_lines = []
   invalid_log_lines = []
   
@@ -42,10 +42,15 @@ def pyparse_logs_network():
                 valid_log_lines.append(log_dict)
       for line in valid_log_lines:
             line["timestamp"] = datetime.strptime(line["timestamp"], "%Y-%m-%d%H:%M:%S")
+  
+  i = 1              
+  for d in valid_log_lines:
+      d["index"] = i
+      i += 1
 
   return valid_log_lines
 
 if __name__ == "__main__":
-    pyparse_logs_network()
+    pyparse_logs()
 
 

@@ -17,6 +17,6 @@ df = pd.concat([df_main, df_network], ignore_index=True)
 # print(df_main.head)
 # print(set(df_network["hostname"].values))
 # print(df_network.head)
-print(df.head)
+print(set(df["appname"].values))
 
 

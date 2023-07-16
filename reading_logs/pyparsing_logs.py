@@ -58,12 +58,18 @@ def pyparse_logs():
                 invalid_log_lines.append(line)  
               else:
                 valid_log_lines.append(log_dict)
-  
-  
+  i = 1              
+  for d in valid_log_lines:
+      d["index"] = i
+      i += 1
+
+  # print(len(valid_log_lines))
+
   return valid_log_lines
 
 
-  # print(valid_log_lines[-5])
+  
+
 if __name__ == "__main__":
 
     pyparse_logs()
