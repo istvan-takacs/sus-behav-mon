@@ -47,7 +47,8 @@ def pyparse_logs():
   for d in valid_log_lines:
       d["index"] = i
       i += 1
-
+  # print(len(invalid_log_lines))
+  # print(len(valid_log_lines))
   return valid_log_lines
 
 if __name__ == "__main__":

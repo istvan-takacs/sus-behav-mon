@@ -64,6 +64,8 @@ def pyparse_logs():
       i += 1
 
   # print(len(valid_log_lines))
+  # print(len(invalid_log_lines))
+  # print(len(valid_log_lines))
 
   return valid_log_lines
 
