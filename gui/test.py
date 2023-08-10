@@ -1,35 +1,31 @@
-from tkinter import *
-  
-window = Tk()
-window.title('Multiple selection')
-  
-# for scrolling vertically
-yscrollbar = Scrollbar(window)
-yscrollbar.pack(side = RIGHT, fill = Y)
-  
-label = Label(window,
-              text = "Select the languages below :  ",
-              font = ("Times New Roman", 10), 
-              padx = 10, pady = 10)
-label.pack()
-list = Listbox(window, selectmode = "multiple", 
-               yscrollcommand = yscrollbar.set)
-  
-# Widget expands horizontally and 
-# vertically by assigning both to
-# fill option
-list.pack(padx = 10, pady = 10,
-          expand = YES, fill = "both")
-  
-x =["C", "C++", "C#", "Java", "Python",
-    "R", "Go", "Ruby", "JavaScript", "Swift",
-    "SQL", "Perl", "XML"]
-  
-for each_item in range(len(x)):
-      
-    list.insert(END, x[each_item])
-    list.itemconfig(each_item, bg = "lime")
-  
-# Attach listbox to vertical scrollbar
-yscrollbar.config(command = list.yview)
-window.mainloop()
+# SuperFastPython.com
+# example of stopping a new thread
+from time import sleep
+from threading import Thread
+from threading import Event
+ 
+# custom task function
+def task(event):
+    # execute a task in a loop
+    for i in range(5):
+        # block for a moment
+        sleep(1)
+        # check for stop
+        if event.is_set():
+            break
+        # report a message
+        print('Worker thread running...')
+    print('Worker closing down')
+ 
+# create the event
+event = Event()
+# create and configure a new thread
+thread = Thread(target=task, args=(event,))
+# start the new thread
+thread.start()
+# block for a while
+sleep(3)
+# stop the worker thread
+print('Main stopping thread')
+event.set()
+# wait for the new thread to finish

@@ -62,6 +62,11 @@ def create_alerts() -> list[dict]:
     return d
     # print(d[('raspberrypi', 'polkitd(authority=local)')]) # dict{tuple:dict}
 
+def get_all_services():
+    df =  pd.DataFrame(add_logs_to_database.get_logs_collection())
+    appnames = df["appname"].unique()
+    return list(appnames)
+
 def add_alerts_to_db(alerts) -> None:
     
     data_alerts = alerts
@@ -108,6 +113,8 @@ def get_alerts_from_db() -> list[dict]:
 
 if __name__ == "__main__":
 
-    print([i for i in create_alerts()])
-    add_alerts_to_db(create_alerts())
-    print(get_alerts_from_db()[-2])
+    # print([i for i in create_alerts()])
+    # add_alerts_to_db(create_alerts())
+    # print(get_alerts_from_db()[-2])
+
+    print(get_all_services())

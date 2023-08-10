@@ -16,24 +16,35 @@ import queue
 
 # Tail logs on thread
 
-def log_tailer(queue) -> None:
-
-    f = subprocess.Popen(['tail','-F', "-n" "5", "/var/log/syslog"],stdout=subprocess.PIPE,stderr=subprocess.PIPE, text = True)
+def log_tailer(queue, event, app_list = [], threshold=0.1) -> None:
+    f = subprocess.Popen(['tail', '-F', "-n" "5", "/var/log/syslog"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     p = select.poll()
     p.register(f.stdout)
+
+    existing_entries = set()  # Keep track of existing entries using a set
     while True:
+        if event.is_set():
+            break
         if p.poll(1):
             output = f.stdout.readline().strip()
             parsed_output = pyparsing_logs.pyparse_tail_logs(output)
             if is_identified == "Safe":
                 parsed_output["alert"] = False
-            elif suspicious(parsed_output) < threshold() or is_identified(parsed_output) == True:
+            elif parsed_output.get("appname") in app_list:
+                parsed_output["alert"] = True
+            elif suspicious(parsed_output) < threshold or is_identified(parsed_output) == True:
                 parsed_output["alert"] = True
             else:
                 parsed_output["alert"] = False
             parsed_output["probability"] = suspicious(parsed_output)
-            queue.put(parsed_output)
+
+            # Check if the parsed_output already exists in existing_entries
+            key = (parsed_output["timestamp"], parsed_output["hostname"], parsed_output["appname"], parsed_output["pid"], parsed_output["message"])
+            if key not in existing_entries:
+                queue.put(parsed_output)
+                existing_entries.add(key)  # Add the key to existing_entries set
             time.sleep(1)
+
 
 
 # Parse tailed logs
@@ -59,11 +70,6 @@ def time_period(hr: int) -> str:
     dct_evening = {str(k): "evening" for k in lst if k > 17 and k < 24}
     merged = {**dct_morning, **dct_beforenoon, **dct_afternoon, **dct_evening}
     return merged.get(str(hr))
-
-
-def threshold(threshold = 0.1):
-    return threshold
-
 
 
 # check if suspicios
@@ -107,11 +113,14 @@ def append_log():
 
                 
 if __name__ == "__main__":
+    event = threading.Event()
     queue = queue.Queue()
-    x = threading.Thread(target=log_tailer, args=(queue,),  daemon=True)
+    app_list = ['rtkit-daemon', 'goa-daemon', 'xbrlapi.desktop', "systemd"]
+    x = threading.Thread(target=log_tailer, args=(queue, event, app_list, ),  daemon=True)
     x.start()
-    while True:
-        print(queue.get())
-        time.sleep(3)
+    # while True:
+    print(queue.get())
+    time.sleep(3)
+    event.set()
     # o = {'timestamp': datetime(2023, 8, 9, 18, 35, 11), 'hostname': 'istvan-HP-ProBook-650-G1', 'appname': 'dbus-daemon', 'pid': '1614', 'message': "[session uid=1000 pid=1614] Successfully activated service 'org.gnome.Terminal'"}         
     # print(is_identified(o))
