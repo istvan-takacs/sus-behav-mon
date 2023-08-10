@@ -43,10 +43,10 @@ def pyparse_logs():
       for line in valid_log_lines:
             line["timestamp"] = datetime.strptime(line["timestamp"], "%Y-%m-%d%H:%M:%S")
   
-  i = 1              
-  for d in valid_log_lines:
-      d["index"] = i
-      i += 1
+  # i = 1              
+  # for d in valid_log_lines:
+  #     d["index"] = i
+  #     i += 1
   # print(len(invalid_log_lines))
   # print(len(valid_log_lines))
   return valid_log_lines

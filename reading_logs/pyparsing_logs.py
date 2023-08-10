@@ -58,10 +58,10 @@ def pyparse_logs():
                 invalid_log_lines.append(line)  
               else:
                 valid_log_lines.append(log_dict)
-  i = 1              
-  for d in valid_log_lines:
-      d["index"] = i
-      i += 1
+  # i = 1              
+  # for d in valid_log_lines:
+  #     d["index"] = i
+  #     i += 1
 
   # print(len(valid_log_lines))
   # print(len(invalid_log_lines))
@@ -69,9 +69,18 @@ def pyparse_logs():
 
   return valid_log_lines
 
+def pyparse_tail_logs(tail_log) -> dict:
 
-  
+  parser = Parser()
+  try:
+    log_dict = parser.parse(tail_log)
+    return log_dict
+  except:
+    raise TypeError(f"Could not parse this item: {tail_log}")
+
 
 if __name__ == "__main__":
 
-    pyparse_logs()
+    tail_log = "Jul 31 17:18:38 istvan-HP-ProBook-650-G1 NetworkManager[1004]: <info>  [1690820318.0556] device (enp0s25): state change: config -> ip-config (reason 'none', sys-iface-state: 'managed')"
+    # print(pyparse_tail_logs(tail_log))
+    # pyparse_logs()
