@@ -1,0 +1,235 @@
+2023-07-06T13:06:24+01:00 raspberrypi systemd[1]: Stopping System Logging Service...
+2023-07-06T13:06:24+01:00 raspberrypi rsyslogd: [origin software="rsyslogd" swVersion="8.2102.0" x-pid="2068" x-info="https://www.rsyslog.com"] exiting on signal 15.
+2023-07-06T13:06:24+01:00 raspberrypi systemd[1]: rsyslog.service: Succeeded.
+2023-07-06T13:06:24+01:00 raspberrypi systemd[1]: Stopped System Logging Service.
+2023-07-06T13:06:24+01:00 raspberrypi systemd[1]: Starting System Logging Service...
+2023-07-06T13:06:24+01:00 raspberrypi rsyslogd: imuxsock: Acquired UNIX socket '/run/systemd/journal/syslog' (fd 3) from systemd.  [v8.2102.0]
+2023-07-06T13:06:24+01:00 raspberrypi rsyslogd: [origin software="rsyslogd" swVersion="8.2102.0" x-pid="2145" x-info="https://www.rsyslog.com"] start
+2023-07-06T13:06:24+01:00 raspberrypi systemd[1]: Started System Logging Service.
+2023-07-06T13:06:24+01:00 raspberrypi sudo: pam_unix(sudo:session): session closed for user root
+2023-07-06T13:06:30+01:00 raspberrypi sudo:   istvan : TTY=pts/0 ; PWD=/home/istvan ; USER=root ; COMMAND=/usr/bin/systemctl enable rsyslog
+2023-07-06T13:06:30+01:00 raspberrypi sudo: pam_unix(sudo:session): session opened for user root(uid=0) by istvan(uid=1000)
+2023-07-06T13:06:30+01:00 raspberrypi systemd[1]: Reloading.
+2023-07-06T13:06:31+01:00 raspberrypi systemd[1]: /lib/systemd/system/plymouth-start.service:16: Unit configured to use KillMode=none. This is unsafe, as it disables systemd's process lifecycle management for the service. Please update your service to use a safer KillMode=, such as 'mixed' or 'control-group'. Support for KillMode=none is deprecated and will eventually be removed.
+2023-07-06T13:06:32+01:00 raspberrypi systemd[1]: Reloading.
+2023-07-06T13:06:33+01:00 raspberrypi systemd[1]: /lib/systemd/system/plymouth-start.service:16: Unit configured to use KillMode=none. This is unsafe, as it disables systemd's process lifecycle management for the service. Please update your service to use a safer KillMode=, such as 'mixed' or 'control-group'. Support for KillMode=none is deprecated and will eventually be removed.
+2023-07-06T13:06:34+01:00 raspberrypi systemd[1]: Reloading.
+2023-07-06T13:06:34+01:00 raspberrypi systemd[1]: /lib/systemd/system/plymouth-start.service:16: Unit configured to use KillMode=none. This is unsafe, as it disables systemd's process lifecycle management for the service. Please update your service to use a safer KillMode=, such as 'mixed' or 'control-group'. Support for KillMode=none is deprecated and will eventually be removed.
+2023-07-06T13:06:35+01:00 raspberrypi sudo: pam_unix(sudo:session): session closed for user root
+2023-07-06T13:06:52+01:00 raspberrypi istvan: I just logged a message
+2023-07-06T13:14:43+01:00 raspberrypi sudo:   istvan : TTY=pts/0 ; PWD=/home/istvan ; USER=root ; COMMAND=/usr/sbin/halt
+2023-07-06T13:14:43+01:00 raspberrypi sudo: pam_unix(sudo:session): session opened for user root(uid=0) by istvan(uid=1000)
+2023-07-06T13:14:43+01:00 raspberrypi systemd[1]: Stopping Session 1 of user istvan.
+2023-07-06T13:14:43+01:00 raspberrypi systemd[1]: Stopping Session 3 of user istvan.
+2023-07-06T13:14:43+01:00 raspberrypi sshd[1245]: pam_unix(sshd:session): session closed for user istvan
+2023-07-06T13:14:43+01:00 raspberrypi systemd[1]: Stopping Session 8 of user istvan.
+2023-07-06T13:14:43+01:00 raspberrypi polkitd(authority=local): Unregistered Authentication Agent for unix-session:3 (system bus name :1.27, object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_US.UTF-8) (disconnected from bus)
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Removed slice system-modprobe.slice.
+2023-07-06T13:14:44+01:00 raspberrypi lightdm: pam_unix(lightdm-autologin:session): session closed for user istvan
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped target Graphical Interface.
+2023-07-06T13:14:44+01:00 raspberrypi sudo: pam_unix(sudo:session): session closed for user root
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped target Multi-User System.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped target Login Prompts.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped target Sound Card.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped target Timers.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: apt-daily-upgrade.timer: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped Daily apt upgrade and clean activities.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: apt-daily.timer: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped Daily apt download activities.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: e2scrub_all.timer: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped Periodic ext4 Online Metadata Check for All Filesystems.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: fstrim.timer: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped Discard unused blocks once a week.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: logrotate.timer: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped Daily rotation of log files.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: man-db.timer: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped Daily man-db regeneration.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: systemd-tmpfiles-clean.timer: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped Daily Cleanup of Temporary Directories.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped target System Time Synchronized.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped target System Time Set.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: systemd-rfkill.socket: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Closed Load/Save RF Kill Switch Status /dev/rfkill Watch.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Unmounting RPC Pipe File System...
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping Modem Manager...
+2023-07-06T13:14:44+01:00 raspberrypi ModemManager[421]: <info>  caught signal, shutting down...
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping Save/Restore Sound Card State...
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping Regular background program processing daemon...
+2023-07-06T13:14:44+01:00 raspberrypi dhcpcd[456]: received SIGTERM, stopping
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping Make remote CUPS printers available locally...
+2023-07-06T13:14:44+01:00 raspberrypi dhcpcd[456]: eth0: removing interface
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping DHCP Client Daemon...
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping dphys-swapfile - set up, mount/unmount, and delete a swap file...
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping Getty on tty1...
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: glamor-test.service: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped Check for glamor.
+2023-07-06T13:14:44+01:00 raspberrypi ModemManager[421]: <info>  ModemManager is shut down
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: gldriver-test.service: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[486]: run-rpc_pipefs.mount: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopped Check for v3d driver.
+2023-07-06T13:14:44+01:00 raspberrypi pulseaudio[502]: X connection to :0 broken (explicit kill or server shutdown).
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping Light Display Manager...
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping PackageKit Daemon...
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping LSB: Switch to ondemand cpu governor (unless shift key is pressed)...
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Stopping LSB: rng-tools (Debian variant)...
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: Condition check resulted in Turns off Raspberry Pi display backlight on shutdown/reboot being skipped.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[1]: rpi-eeprom-update.service: Succeeded.
+2023-07-06T13:14:44+01:00 raspberrypi systemd[486]: pulseaudio.service: Main process exited, code=exited, status=1/FAILURE
+2023-07-07T12:29:49+01:00 raspberrypi systemd-timesyncd[237]: Initial synchronization to time server 213.5.132.231:123 (2.debian.pool.ntp.org).
+2023-07-07T12:29:49+01:00 raspberrypi rsyslogd: action 'action-0-builtin:omfwd' resumed (module 'builtin:omfwd') [v8.2102.0 try https://www.rsyslog.com/e/2359 ]
+2023-07-07T12:29:49+01:00 raspberrypi systemd[1]: Starting Rotate log files...
+2023-07-07T12:29:49+01:00 raspberrypi systemd[1]: Starting Daily man-db regeneration...
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Stopping Make remote CUPS printers available locally...
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: cups-browsed.service: Succeeded.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Stopped Make remote CUPS printers available locally.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Stopping CUPS Scheduler...
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: cups.service: Succeeded.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Stopped CUPS Scheduler.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: cups.path: Succeeded.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Stopped CUPS Scheduler.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Stopping CUPS Scheduler.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Started CUPS Scheduler.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: cups.socket: Succeeded.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Closed CUPS Scheduler.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Stopping CUPS Scheduler.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Listening on CUPS Scheduler.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Starting CUPS Scheduler...
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Started CUPS Scheduler.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Started Make remote CUPS printers available locally.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: logrotate.service: Succeeded.
+2023-07-07T12:29:50+01:00 raspberrypi systemd[1]: Finished Rotate log files.
+2023-07-07T12:29:52+01:00 raspberrypi systemd[1]: man-db.service: Succeeded.
+2023-07-07T12:29:52+01:00 raspberrypi systemd[1]: Finished Daily man-db regeneration.
+2023-07-07T12:29:52+01:00 raspberrypi systemd[1]: man-db.service: Consumed 1.586s CPU time.
+2023-07-07T12:29:55+01:00 raspberrypi dbus-daemon[271]: [system] Failed to activate service 'org.bluez': timed out (service_start_timeout=25000ms)
+2023-07-07T12:29:55+01:00 raspberrypi pulseaudio[583]: GetManagedObjects() failed: org.freedesktop.DBus.Error.NoReply: Did not receive a reply. Possible causes include: the remote application did not send a reply, the message bus security policy blocked the reply, the reply timeout expired, or the network connection was broken.
+2023-07-07T12:30:21+01:00 raspberrypi sshd[1035]: Accepted password for istvan from 192.168.0.21 port 57862 ssh2
+2023-07-07T12:30:21+01:00 raspberrypi sshd[1035]: pam_unix(sshd:session): session opened for user istvan(uid=1000) by (uid=0)
+2023-07-07T12:30:22+01:00 raspberrypi systemd-logind[285]: New session 4 of user istvan.
+2023-07-07T12:30:22+01:00 raspberrypi systemd[1]: Started Session 4 of user istvan.
+2023-07-07T12:44:56+01:00 raspberrypi systemd[1]: Starting Cleanup of Temporary Directories...
+2023-07-07T12:44:56+01:00 raspberrypi systemd[1]: systemd-tmpfiles-clean.service: Succeeded.
+2023-07-07T12:44:56+01:00 raspberrypi systemd[1]: Finished Cleanup of Temporary Directories.
+2023-07-07T12:46:23+01:00 raspberrypi systemd[1]: Starting Daily apt upgrade and clean activities...
+2023-07-07T12:46:38+01:00 raspberrypi systemd[1]: apt-daily-upgrade.service: Succeeded.
+2023-07-07T12:46:38+01:00 raspberrypi systemd[1]: Finished Daily apt upgrade and clean activities.
+2023-07-07T12:46:38+01:00 raspberrypi systemd[1]: apt-daily-upgrade.service: Consumed 13.833s CPU time.
+2023-07-07T13:05:29+01:00 raspberrypi sudo:   istvan : TTY=pts/0 ; PWD=/home/istvan ; USER=root ; COMMAND=/usr/sbin/halt
+2023-07-07T13:05:29+01:00 raspberrypi sudo: pam_unix(sudo:session): session opened for user root(uid=0) by istvan(uid=1000)
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping Session 1 of user istvan.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping Session 3 of user istvan.
+2023-07-07T13:05:29+01:00 raspberrypi sshd[1035]: pam_unix(sshd:session): session closed for user istvan
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping Session 4 of user istvan.
+2023-07-07T13:05:29+01:00 raspberrypi sudo: pam_unix(sudo:session): session closed for user root
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Removed slice system-modprobe.slice.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped target Graphical Interface.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped target Multi-User System.
+2023-07-07T13:05:29+01:00 raspberrypi polkitd(authority=local): Unregistered Authentication Agent for unix-session:3 (system bus name :1.27, object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_US.UTF-8) (disconnected from bus)
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped target Login Prompts.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped target Sound Card.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped target Timers.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: apt-daily-upgrade.timer: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped Daily apt upgrade and clean activities.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: apt-daily.timer: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped Daily apt download activities.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: e2scrub_all.timer: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped Periodic ext4 Online Metadata Check for All Filesystems.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: fstrim.timer: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi lightdm: pam_unix(lightdm-autologin:session): session closed for user istvan
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped Discard unused blocks once a week.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: logrotate.timer: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped Daily rotation of log files.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: man-db.timer: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped Daily man-db regeneration.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: systemd-tmpfiles-clean.timer: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped Daily Cleanup of Temporary Directories.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped target System Time Synchronized.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped target System Time Set.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: systemd-rfkill.socket: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Closed Load/Save RF Kill Switch Status /dev/rfkill Watch.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Unmounting RPC Pipe File System...
+2023-07-07T13:05:29+01:00 raspberrypi ModemManager[376]: <info>  caught signal, shutting down...
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping Modem Manager...
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping Save/Restore Sound Card State...
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping Regular background program processing daemon...
+2023-07-07T13:05:29+01:00 raspberrypi ModemManager[376]: <info>  ModemManager is shut down
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping Make remote CUPS printers available locally...
+2023-07-07T13:05:29+01:00 raspberrypi dhcpcd[388]: received SIGTERM, stopping
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping DHCP Client Daemon...
+2023-07-07T13:05:29+01:00 raspberrypi dhcpcd[388]: eth0: removing interface
+2023-07-07T13:05:29+01:00 raspberrypi systemd[549]: run-rpc_pipefs.mount: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping dphys-swapfile - set up, mount/unmount, and delete a swap file...
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping Getty on tty1...
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: glamor-test.service: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped Check for glamor.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: gldriver-test.service: Succeeded.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopped Check for v3d driver.
+2023-07-07T13:05:29+01:00 raspberrypi pulseaudio[583]: X connection to :0 broken (explicit kill or server shutdown).
+2023-07-07T13:05:29+01:00 raspberrypi systemd[549]: pulseaudio.service: Main process exited, code=exited, status=1/FAILURE
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping Light Display Manager...
+2023-07-07T13:05:29+01:00 raspberrypi systemd[549]: pulseaudio.service: Failed with result 'exit-code'.
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping PackageKit Daemon...
+2023-07-07T13:05:29+01:00 raspberrypi systemd[1]: Stopping LSB: Switch to ondemand cpu governor (unless shift key is pressed)...
+2023-07-07T13:06:11+01:00 raspberrypi dhcpcd[393]: eth0: received approval for 192.168.0.43
+2023-07-07T13:06:11+01:00 raspberrypi dhcpcd[393]: eth0: adding route to 192.168.0.0/24
+2023-07-07T13:06:11+01:00 raspberrypi dhcpcd[393]: eth0: adding default route via 192.168.0.1
+2023-07-07T13:06:12+01:00 raspberrypi rsyslogd: action 'action-0-builtin:omfwd' resumed (module 'builtin:omfwd') [v8.2102.0 try https://www.rsyslog.com/e/2359 ]
+2023-07-07T13:06:12+01:00 raspberrypi avahi-daemon[270]: Got SIGHUP, reloading.
+2023-07-07T13:06:12+01:00 raspberrypi avahi-daemon[270]: No service file found in /etc/avahi/services.
+2023-07-07T13:06:13+01:00 raspberrypi dbus-daemon[272]: [system] Failed to activate service 'org.bluez': timed out (service_start_timeout=25000ms)
+2023-07-07T13:06:13+01:00 raspberrypi pulseaudio[533]: GetManagedObjects() failed: org.freedesktop.DBus.Error.NoReply: Did not receive a reply. Possible causes include: the remote application did not send a reply, the message bus security policy blocked the reply, the reply timeout expired, or the network connection was broken.
+2023-07-07T13:06:47+01:00 raspberrypi systemd-timesyncd[238]: Timed out waiting for reply from 213.5.132.231:123 (0.debian.pool.ntp.org).
+2023-08-11T11:47:22+01:00 raspberrypi systemd-timesyncd[238]: Initial synchronization to time server 139.143.5.30:123 (0.debian.pool.ntp.org).
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Starting Online ext4 Metadata Check for All Filesystems...
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Starting Rotate log files...
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Starting Daily man-db regeneration...
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: e2scrub_all.service: Succeeded.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Finished Online ext4 Metadata Check for All Filesystems.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Stopping Make remote CUPS printers available locally...
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: cups-browsed.service: Succeeded.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Stopped Make remote CUPS printers available locally.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Stopping CUPS Scheduler...
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: cups.service: Succeeded.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Stopped CUPS Scheduler.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: cups.path: Succeeded.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Stopped CUPS Scheduler.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Stopping CUPS Scheduler.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Started CUPS Scheduler.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: cups.socket: Succeeded.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Closed CUPS Scheduler.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Stopping CUPS Scheduler.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Listening on CUPS Scheduler.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Starting CUPS Scheduler...
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Started CUPS Scheduler.
+2023-08-11T11:47:23+01:00 raspberrypi systemd[1]: Started Make remote CUPS printers available locally.
+2023-08-11T11:47:24+01:00 raspberrypi systemd[1]: rsyslog.service: Sent signal SIGHUP to main process 290 (rsyslogd) on client request.
+2023-08-11T11:47:24+01:00 raspberrypi systemd[1]: logrotate.service: Succeeded.
+2023-08-11T11:47:24+01:00 raspberrypi systemd[1]: Finished Rotate log files.
+2023-08-11T11:47:25+01:00 raspberrypi systemd[1]: man-db.service: Succeeded.
+2023-08-11T11:47:25+01:00 raspberrypi systemd[1]: Finished Daily man-db regeneration.
+2023-08-11T11:47:25+01:00 raspberrypi systemd[1]: man-db.service: Consumed 1.643s CPU time.
+2023-08-11T11:52:15+01:00 raspberrypi systemd[1]: Starting Daily apt upgrade and clean activities...
+2023-08-11T11:52:19+01:00 raspberrypi systemd[1]: apt-daily-upgrade.service: Succeeded.
+2023-08-11T11:52:19+01:00 raspberrypi systemd[1]: Finished Daily apt upgrade and clean activities.
+2023-08-11T11:52:19+01:00 raspberrypi systemd[1]: apt-daily-upgrade.service: Consumed 3.082s CPU time.
+2023-08-11T11:53:21+01:00 raspberrypi sshd[1107]: Invalid user raspberrypi from 192.168.0.21 port 54862
+2023-08-11T11:53:35+01:00 raspberrypi sshd[1107]: pam_unix(sshd:auth): check pass; user unknown
+2023-08-11T11:53:35+01:00 raspberrypi sshd[1107]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.0.21 
+2023-08-11T11:53:37+01:00 raspberrypi sshd[1107]: Failed password for invalid user raspberrypi from 192.168.0.21 port 54862 ssh2
+2023-08-11T11:53:48+01:00 raspberrypi sshd[1107]: pam_unix(sshd:auth): check pass; user unknown
+2023-08-11T11:53:51+01:00 raspberrypi sshd[1107]: Failed password for invalid user raspberrypi from 192.168.0.21 port 54862 ssh2
+2023-08-11T11:54:52+01:00 raspberrypi sshd[1107]: pam_unix(sshd:auth): check pass; user unknown
+2023-08-11T11:54:54+01:00 raspberrypi sshd[1107]: Failed password for invalid user raspberrypi from 192.168.0.21 port 54862 ssh2
+2023-08-11T11:54:55+01:00 raspberrypi sshd[1107]: Connection closed by invalid user raspberrypi 192.168.0.21 port 54862 [preauth]
+2023-08-11T11:54:55+01:00 raspberrypi sshd[1107]: PAM 2 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.0.21 
+2023-08-11T11:57:24+01:00 raspberrypi rsyslogd: [origin software="rsyslogd" swVersion="8.2102.0" x-pid="290" x-info="https://www.rsyslog.com"] rsyslogd was HUPed
+2023-08-11T12:00:19+01:00 raspberrypi sshd[1114]: Accepted password for istvan from 192.168.0.21 port 60800 ssh2
+2023-08-11T12:00:19+01:00 raspberrypi sshd[1114]: pam_unix(sshd:session): session opened for user istvan(uid=1000) by (uid=0)
+2023-08-11T12:00:19+01:00 raspberrypi systemd-logind[291]: New session 4 of user istvan.
+2023-08-11T12:00:19+01:00 raspberrypi systemd[1]: Started Session 4 of user istvan.
+2023-08-11T12:01:16+01:00 raspberrypi systemd[1]: Starting Cleanup of Temporary Directories...
+2023-08-11T12:01:16+01:00 raspberrypi systemd[1]: systemd-tmpfiles-clean.service: Succeeded.
+2023-08-11T12:01:16+01:00 raspberrypi systemd[1]: Finished Cleanup of Temporary Directories.
+2023-08-11T12:17:01+01:00 raspberrypi CRON[1145]: pam_unix(cron:session): session opened for user root(uid=0) by (uid=0)
+2023-08-11T12:17:01+01:00 raspberrypi CRON[1146]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+2023-08-11T12:17:01+01:00 raspberrypi CRON[1145]: pam_unix(cron:session): session closed for user root

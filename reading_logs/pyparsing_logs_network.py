@@ -1,25 +1,37 @@
-from pyparsing import Word, alphas, Suppress, Combine, nums, string, Regex, Optional
+from pyparsing import Word, alphas, Suppress, Combine, nums, Regex, Optional, exceptions
 from datetime import datetime
 
+
 class Parser(object):
+    """
+    The class is largely taken from...
+    """
+    # log lines don't include the year, but if we don't provide one, datetime.strptime will assume 1900
     ASSUMED_YEAR = '2023'
 
     def __init__(self):
-        ints = Word(nums)
+      ints = Word(nums)
 
-        timestamp = Combine(ints + '-' + ints + '-' + ints + Suppress('T') + ints + ':' + ints + ':' + ints + Suppress('+' + Word(nums) + ':' + Word(nums)))
-        
-        hostname = Word(alphas + nums + "_-.")
+      # timestamp
+      timestamp = Combine(ints + '-' + ints + '-' + ints + Suppress('T') + ints + ':' + ints + ':' + ints + Suppress('+' + Word(nums) + ':' + Word(nums)))
+      
+      # hostname
+      hostname = Word(alphas + nums + "_-.")
 
-        appname = (Word(alphas + "/-_.()1234567890@:=]")("appname") + (Suppress("[") + ints("pid") + Suppress("]"))) | (Word(alphas + "/-_.()1234567890@=[")("appname"))
-        appname.setName("appname")
+      # appname
+      appname = (Word(alphas + "/-_.()1234567890@:=]")("appname") + (Suppress("[") + ints("pid") + Suppress("]"))) | (Word(alphas + "/-_.()1234567890@=[")("appname"))
+      appname.setName("appname")
 
-        message = Regex(".*")
+      # message
+      message = Regex(".*")
 
-        self._pattern = timestamp("timestamp") + hostname("hostname") + Optional(appname) + Suppress(':') + message("message")
+      # pattern build
+      # (add results names to make it easier to access parsed fields)
+      self._pattern = timestamp("timestamp") + hostname("hostname") + Optional(appname) + Suppress(':') + message("message")
 
     def parse(self, line):
         parsed = self._pattern.parseString(line)
+        # fill in keys that might not have been found in the input string
         for key in ['appname', 'pid', 'message']:
             if key not in parsed:
                 parsed[key] = ''
@@ -36,22 +48,16 @@ def pyparse_logs():
       for line in data_rb.splitlines():
               try:
                 log_dict = parser.parse(line)
-              except:
-                invalid_log_lines.append(line)  
-              else:
                 valid_log_lines.append(log_dict)
+              except exceptions.ParseException:
+                invalid_log_lines.append(line)        
       for line in valid_log_lines:
             line["timestamp"] = datetime.strptime(line["timestamp"], "%Y-%m-%d%H:%M:%S")
-  
-  # i = 1              
-  # for d in valid_log_lines:
-  #     d["index"] = i
-  #     i += 1
-  # print(len(invalid_log_lines))
-  # print(len(valid_log_lines))
+  if len(invalid_log_lines) > 0:
+     raise TypeError(f"Could not parse {len(invalid_log_lines)} items.")
   return valid_log_lines
 
 if __name__ == "__main__":
-    pyparse_logs()
+    print(pyparse_logs())
 
 

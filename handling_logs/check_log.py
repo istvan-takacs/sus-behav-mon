@@ -3,9 +3,7 @@ sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/handling_logs/')
 sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/reading_logs/')
 import pyparsing_logs
 import handling_logs
-import mongo_connect
-import datetime
-from datetime import datetime
+from add_logs_to_database import get_collection
 import subprocess
 import threading
 import syslog
@@ -47,22 +45,15 @@ def log_tailer(queue, event, app_list = [], threshold=0.1) -> None:
 
 
 
-# Parse tailed logs
-#output below
-# some_parsed_log = {'_id': 5800, 'appname': 'CRON', 'hostname': 'istvan-HP-ProBook-650-G1', 'message': '(root) CMD (   cd / && run-parts --report /etc/cron.hourly)', 'pid': '9272', 'timestamp': datetime.datetime(2023, 8, 6, 14, 17, 1)}
-
-
-#create function for time of day
-"""
-(all incl.)
-
-Morning: 0-5 
-Beforenoon: 6-11
-Afternooon: 12-17
-Evening: 18-24
-"""
-
 def time_period(hr: int) -> str:
+    """
+    (all incl.)
+
+    Morning: 0-5 
+    Beforenoon: 6-11
+    Afternooon: 12-17
+    Evening: 18-24
+    """
     lst = [int(i) for i in range(0, 24)]
     dct_morning = {str(k): "morning" for k in lst if k < 6}
     dct_beforenoon = {str(k): "beforenoon" for k in lst if k > 5 and k < 12 }
@@ -88,13 +79,9 @@ def suspicious(some_parsed_log) -> float:
 
 
 def is_identified(parsed_obj):
-    client = mongo_connect.get_client()
+    
+    alerts_collection = get_collection("Alerts")
 
-    # Create a connection to the database.
-    db = client[mongo_connect.get_database_name()]
-
-    # Create collections.
-    alerts_collection = db["Alerts"]
     host, app = parsed_obj["hostname"], parsed_obj["appname"]
     x = alerts_collection.find({
         "hostname":host, 
@@ -103,16 +90,17 @@ def is_identified(parsed_obj):
         "_id":0})
     return list(x)[0]["identified"] # To get only the boolean
     
-
-def append_log():
-
-    while True:
-        syslog.syslog("This should show up in the logs")
-        time.sleep(1)
         
 
                 
 if __name__ == "__main__":
+
+    def append_log(): # FOR TESTING
+
+        while True:
+            syslog.syslog("This should show up in the logs")
+            time.sleep(1)
+
     event = threading.Event()
     queue = queue.Queue()
     app_list = ['rtkit-daemon', 'goa-daemon', 'xbrlapi.desktop', "systemd"]
@@ -122,5 +110,4 @@ if __name__ == "__main__":
     print(queue.get())
     time.sleep(3)
     event.set()
-    # o = {'timestamp': datetime(2023, 8, 9, 18, 35, 11), 'hostname': 'istvan-HP-ProBook-650-G1', 'appname': 'dbus-daemon', 'pid': '1614', 'message': "[session uid=1000 pid=1614] Successfully activated service 'org.gnome.Terminal'"}         
-    # print(is_identified(o))
+    

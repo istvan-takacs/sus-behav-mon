@@ -7,6 +7,7 @@ import os
 import csv
 sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/storing_logs')
 sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/handling_logs')
+from add_logs_to_database import get_collection, set_logs_collection
 import check_log
 import queue
 import handling_logs
@@ -15,7 +16,6 @@ import pymongo
 import datetime
 from datetime import datetime
 import time
-import add_logs_to_database
 
 class Gui(tk.Tk):
     def __init__(self, *args, **kwargs) -> None:
@@ -30,29 +30,31 @@ class Gui(tk.Tk):
         # Initialising variables
         self.select_all_flag = True
         self.blacklisted_app_list = []
-
+        self.existing_entries = set()
         self.connect_to_collections()
+
+        # Create all tabs,  all frames and set up the all pages
         self.create_tabs()
         self.create_frames()
         self.create_outlay_logs()
         self.create_outlay_alerts()
-        self.check_queue()
         self.create_outlay_dashboard()
         self.create_outlay_config()
         self.create_outlay_doc()
+
+        # Connecting to the database
+        self.update_data()
+
+        #Start tailing system logs
         self.tail_logs()
 
         
-      
+    def update_data(self):
 
-        # NEED TO SET UP COMM with DB
-        # ALERTS
-        # handling_logs.add_alerts_to_db(self.alert_table_data) ##update alerts
-        # handling_logs.get_alerts_from_db() ## to get alerts table
+        update = threading.Thread(target =self.add_from_db_to_logs, daemon=True)
+        update.start()
+        
 
-        # LOGS
-        # add_logs_to_database.set_logs_collection() ## update logs collection
-        # add_logs_to_database.get_logs_collection() ## get logs collection
     def tail_logs(self):
 
         self.event = threading.Event()
@@ -65,15 +67,21 @@ class Gui(tk.Tk):
         show_tailed_logs.start()
     
     def connect_to_collections(self):
-
-        self.client = mongo_connect.get_client()
-
-        # Create a connection to the database.
-        self.db = self.client[mongo_connect.get_database_name()]
-
+        
         # Load in collections.
-        self.logs_collection = self.db["Logs"]
-        self.alerts_collection = self.db["Alerts"]
+        self.logs_collection = get_collection("Logs")
+        self.alerts_collection = get_collection("Alerts")
+
+    def add_from_db_to_logs(self):
+        
+        while True:
+            self.connect_to_collections()
+            set_logs_collection()
+            data = list(self.logs_collection.find({}))
+            self.add_to_logs(data)
+
+            # Every 10 minutes the logs table is updated from the database
+            time.sleep(600)
 
     
 
@@ -174,7 +182,7 @@ class Gui(tk.Tk):
             new_dct = {k: dct[k] for k in keyorder if k in dct}
             
             to_insert = tuple(new_dct.values())
-            self.my_data.insert(parent='', index="end", iid=idx, text='', values=to_insert)
+            self.my_data.insert(parent='', index="end", text='', values=to_insert)
         self.my_data.pack()
 
 
@@ -256,9 +264,6 @@ class Gui(tk.Tk):
                 index += 1
 
 
-
-    def check_queue(self):
-        self.existing_entries = set()
 
     def create_outlay_alerts(self):
 
@@ -384,13 +389,16 @@ class Gui(tk.Tk):
         
         try:
             new_threshold = int(entry.get())
+            if new_threshold < 0 or new_threshold > 100:
+                messagebox.showerror("Invalid input", "Please enter an integer number between 0 and 100.")
+                return
             intvar.set(new_threshold)
             # Set event to stop and restart the tailing of the logs
             self.event.set()
             self.tail_logs()
 
         except ValueError:
-            messagebox.showerror("Invalid input", "Please put in an integer number between 0 and 100")
+            messagebox.showerror("Invalid input", "Please enter an integer number between 0 and 100.")
 
 
 
@@ -458,10 +466,14 @@ class Gui(tk.Tk):
         if len(data) < 1:
             messagebox.showerror("No data", "No data available to export")
             return
-        fln = filedialog.asksaveasfilename(initialdir=os.getcwd(), title="Save as CSV", filetypes=(("CSV File", "*.csv"), ("All files", "*.*")))
-        with open(fln, mode="w", newline='') as myfile:
-            exp_writer = csv.writer(myfile)
-            exp_writer.writerows(data)
+        try:
+            fln = filedialog.asksaveasfilename(initialdir=os.getcwd(), title="Save as CSV", filetypes=(("CSV File", "*.csv"), ("All files", "*.*")))
+            with open(fln, mode="w", newline='') as myfile:
+                exp_writer = csv.writer(myfile)
+                exp_writer.writerows(data)        
+        # If selection is cancelled return    
+        except TypeError:
+            return
         messagebox.showinfo("Data Exported", "Your data has been exported to "+os.path.basename(fln)  +" successfully")
 
     def dismiss(self, tree):
@@ -571,13 +583,17 @@ class Gui(tk.Tk):
         keys = ["_id","timestamp", "hostname", "appname","pid", "message"]
         query = {}
         for idx, entry in enumerate(entry_list):
-            to_search = str(entry.get())
-            if to_search:
-                if entry == self.timestamp_entry_logs:
-                    datetime_object = datetime.strptime(to_search, "%Y-%m-%d %H:%M:%S")
-                    query[keys[idx]] = datetime_object
-                else:
-                    query[keys[idx]] = to_search
+            try:
+                to_search = str(entry.get())
+                if to_search:
+                    if entry == self.timestamp_entry_logs:
+                        datetime_object = datetime.strptime(to_search, "%Y-%m-%d %H:%M:%S")
+                        query[keys[idx]] = datetime_object
+                    else:
+                        query[keys[idx]] = to_search
+            except ValueError:
+                messagebox.showerror("Input error",
+                "The entry you have entered is not in the correct format.")
         return self.logs_collection.find(query)
     
     def clear_entry_fields(self, entry_list):
@@ -625,11 +641,6 @@ class Gui(tk.Tk):
         for idx, entry in enumerate(entry_list):
             entry.insert(0, values[idx])
         self.select(tree=my_data)            
-
-
-        
-    #clear entry boxes
-        
 
 
 if __name__ == "__main__":

@@ -4,9 +4,8 @@ sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/storing_logs/')
 import pandas as pd
 import mongo_connect
 from datetime import datetime
-import pymongo
 import add_logs_to_database
-
+from add_logs_to_database import get_collection
 
 
 def hist_maker(host, app):
@@ -15,7 +14,6 @@ def hist_maker(host, app):
     total_sum = my_df.time.apply(lambda x: x.hour).value_counts().sum()
 
     normalised = (my_df.time.apply(lambda x: x.hour).value_counts()/total_sum)
-
     normal_dict = normalised.to_dict()
 
     for i in range(0, 25):
@@ -71,14 +69,7 @@ def add_alerts_to_db(alerts) -> None:
     
     data_alerts = alerts
 
-    # Get a client connection to the MongoDB database.
-    client = mongo_connect.get_client()
-
-    # Create a connection to the database.
-    db = client[mongo_connect.get_database_name()]
-
-    # Create collections.
-    alerts_collection = db["Alerts"]
+    alerts_collection = get_collection("Alerts")
 
     now = datetime.now()
     last_update = {"last_update":now}
@@ -100,21 +91,15 @@ def add_alerts_to_db(alerts) -> None:
    
 def get_alerts_from_db() -> list[dict]:
 
-    # Get a client connection to the MongoDB database.
-    client = mongo_connect.get_client()
-
-    # Create a connection to the database.
-    db = client[mongo_connect.get_database_name()]
-
-    # Create collections.
-    alerts_collection = db["Alerts"]
-
+    alerts_collection = get_collection("Alerts")
     return list(alerts_collection.find({}))
+
+
 
 if __name__ == "__main__":
 
-    # print([i for i in create_alerts()])
-    # add_alerts_to_db(create_alerts())
-    # print(get_alerts_from_db()[-2])
+    print([i for i in create_alerts()])
+    add_alerts_to_db(create_alerts())
+    print(get_alerts_from_db()[-2])
 
-    print(get_all_services())
+    # print(get_all_services())

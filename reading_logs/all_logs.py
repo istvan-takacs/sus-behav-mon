@@ -11,4 +11,6 @@ def get_logs():
 
     return logs
 
-# print(len(get_logs()))
+
+if __name__ == "__main__":
+    print(get_logs())

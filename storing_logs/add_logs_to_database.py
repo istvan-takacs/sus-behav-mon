@@ -2,21 +2,23 @@ import sys
 sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/reading_logs/')
 import all_logs
 import mongo_connect
-import pymongo
-from datetime import datetime
+from pymongo import collection
 
-
-def insert_into_collection(objs_to_add, clt="MainLogs"):  # 10 objs
-    
+def get_collection(clt: str) -> collection:
     # Get a client connection to the MongoDB database.
     client = mongo_connect.get_client()
 
     # Create a connection to the database.
     db = client[mongo_connect.get_database_name()]
 
-    # Load in collections.
+    # Create collections.
     collection = db[clt]
+    return collection
 
+
+def insert_into_collection(objs_to_add, clt: str) -> None: 
+    
+    collection = get_collection(clt)
     for document in objs_to_add:
         collection.update_one(
             filter={
@@ -34,32 +36,24 @@ def set_logs_collection():
     insert_into_collection(data_all_logs, "Logs")
 
 def get_logs_collection() -> list[dict]:
-    # Get a client connection to the MongoDB database.
-    client = mongo_connect.get_client()
-
-    # Create a connection to the database.
-    db = client[mongo_connect.get_database_name()]
 
     # Load in collections.
-    log_collection = db["Logs"]
+    log_collection = get_collection("Logs")
 
     # Select all documents from collections.
     cursor = list(log_collection.find({}))
     return cursor
 
 if __name__ == "__main__":
-     # Get a client connection to the MongoDB database.
-    client = mongo_connect.get_client()
-
-    # Create a connection to the database.
-    db = client[mongo_connect.get_database_name()]
-
+    
+    log_clt = get_collection("Logs")
+    
     print(">> Documents in the \"Logs\" collection:")
-    print(db["Logs"].count_documents({}))
+    print(log_clt.count_documents({}))
     set_logs_collection()
     print(">> Documents in the \"Logs\" collection:")
-    print(db["Logs"].count_documents({}))
-    print(list(db["Logs"].find({
+    print(log_clt.count_documents({}))
+    print(list(log_clt.find({
         'hostname': 'istvan-HP-ProBook-650-G1'
     }))[-1])
     
