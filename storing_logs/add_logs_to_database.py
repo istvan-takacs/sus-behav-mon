@@ -10,13 +10,11 @@ def get_collection(clt: str) -> collection:
 
     # Create a connection to the database.
     db = client[mongo_connect.get_database_name()]
+    
+    # Load collections.
+    return db[clt]
 
-    # Create collections.
-    collection = db[clt]
-    return collection
-
-
-def insert_into_collection(objs_to_add, clt: str) -> None: 
+def insert_into_collection(objs_to_add: list[dict], clt: str) -> None: 
     
     collection = get_collection(clt)
     for document in objs_to_add:
@@ -30,30 +28,30 @@ def insert_into_collection(objs_to_add, clt: str) -> None:
             upsert=True,
         )
 
-def set_logs_collection():
+def set_logs_collection(clt: str = "Logs")-> None:
 
     data_all_logs = all_logs.get_logs()
-    insert_into_collection(data_all_logs, "Logs")
+    insert_into_collection(data_all_logs, clt)
 
-def get_logs_collection() -> list[dict]:
+def get_logs_collection(clt:str = "Logs") -> list[dict]:
 
     # Load in collections.
-    log_collection = get_collection("Logs")
+    log_collection = get_collection(clt)
 
     # Select all documents from collections.
     cursor = list(log_collection.find({}))
     return cursor
 
 if __name__ == "__main__":
+    pass
+    # log_clt = get_collection("Logs")
     
-    log_clt = get_collection("Logs")
-    
-    print(">> Documents in the \"Logs\" collection:")
-    print(log_clt.count_documents({}))
-    set_logs_collection()
-    print(">> Documents in the \"Logs\" collection:")
-    print(log_clt.count_documents({}))
-    print(list(log_clt.find({
-        'hostname': 'istvan-HP-ProBook-650-G1'
-    }))[-1])
-    
+    # print(">> Documents in the \"Logs\" collection:")
+    # print(log_clt.count_documents({}))
+    # set_logs_collection()
+    # print(">> Documents in the \"Logs\" collection:")
+    # print(log_clt.count_documents({}))
+    # print(list(log_clt.find({
+    #     'hostname': 'istvan-HP-ProBook-650-G1'
+    # }))[-1])
+    print(type(get_collection("test")))
