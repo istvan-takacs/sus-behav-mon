@@ -1,0 +1,15 @@
+{
+    "files.autoSave": "onWindowChange",
+    "python.analysis.diagnosticSeverityOverrides": {
+
+    },
+    "python.linting.enabled": false,
+    "python.linting.pylintEnabled": false,
+    "python.analysis.extraPaths": [
+        "./storing_logs"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none"
+}

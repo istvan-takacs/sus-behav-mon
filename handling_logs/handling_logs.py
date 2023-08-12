@@ -1,5 +1,6 @@
 import sys
 import datetime
+import numpy as np
 sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/storing_logs/')
 import pandas as pd
 import mongo_connect
@@ -8,98 +9,78 @@ import add_logs_to_database
 from add_logs_to_database import get_collection
 
 
-def hist_maker(host, app):
-    
-    my_df = df[(df.hostname == host) & (df.appname == app)]
-    total_sum = my_df.time.apply(lambda x: x.hour).value_counts().sum()
-
-    normalised = (my_df.time.apply(lambda x: x.hour).value_counts()/total_sum)
-    normal_dict = normalised.to_dict()
-
-    for i in range(0, 25):
-        if i not in normal_dict:
-            normal_dict[i] = 0
+def hist_maker(host: str, app: str, df: pd.DataFrame, number_of_bins: int = 5) -> dict:
     """
+    Currently set to create 5 intervals that can be interpreted this way:
     (all incl.)
-    
     Morning: 0-5 
     Beforenoon: 6-11
     Afternooon: 12-17
-    Evening: 18-24
+    Evening: 18-23
     """
-    
-    normal_dict["morning"] = sum([normal_dict.get(i) for i in normal_dict if type(i) is int and i < 6])
-    normal_dict["beforenoon"] = sum([normal_dict.get(i) for i in normal_dict if type(i) is int and i < 12 and i >= 6])
-    normal_dict["afternoon"] = sum([normal_dict.get(i) for i in normal_dict if type(i) is int and i < 18 and i >= 12])
-    normal_dict["evening"] = sum([normal_dict.get(i) for i in normal_dict if type(i) is int and i < 24 and i >= 18])
-    
-    keyorder = ['morning', 'beforenoon', 'afternoon', 'evening'] + [i for i in range(0, 24)]
-    new_dct = {str(k): normal_dict[k] for k in keyorder if k in normal_dict}
 
-    return new_dct
+    my_df = df[(df.hostname == host) & (df.appname == app)]
+    total_sum = my_df.time.apply(lambda x: x.hour).value_counts().sum()
+
+    normalised = (my_df.time.apply(lambda x: x.hour).value_counts()/total_sum).to_frame()
+    normalised.columns = ['frequency']  # Define a column name
+
+    normalised.set_index(normalised.index, inplace=True)
+
+    # Ensure all hours are included in the index
+    for i in range(0, 24):
+        if i not in normalised.index:
+            normalised.loc[i] = [0]
+
+    # Sort the DataFrame by index
+    normalised.sort_index(inplace=True)
+    bins =  np.linspace(0, 23, number_of_bins, dtype=int)
+    ind = np.digitize(normalised.index, bins)
+
+    intervals = normalised.groupby(ind).sum()
+    indexes = []
+    for i in range(1, len(intervals)+1):
+        indexes.append(f"Interval {i}")
+    index = pd.Index(indexes)
+    intervals.set_index(index, inplace=True)
+
+    data = pd.concat([intervals, normalised], axis=0)
+    data.index = data.index.map(str)
+    return data.to_dict().get("frequency")
+    
+    
 
 def create_alerts() -> list[dict]:
 
-    global df
     df =  pd.DataFrame(add_logs_to_database.get_logs_collection())
-    # df['date'] = [d.date() for d in df['timestamp']]
     df['time'] = [d.time() for d in df['timestamp']]
-    # df["ttime"] = [datetime.datetime.combine(datetime.date.today(), t) for t in df["time"]]
 
     hostnames = df["hostname"].unique()
     appnames = df["appname"].unique()
-    d = []
+    alerts = []
     id = 1
     for host in hostnames:
         for app in appnames:
-            hist = hist_maker(host, app)
+            hist = hist_maker(host, app, df)
             temp_dct = {"_id": str(id), "hostname":host, "appname":app, "probability": hist}
-            # merged = {**temp_dct, **hist}
-            d.append(temp_dct)
+            alerts.append(temp_dct)
             id += 1
-    return d
-    # print(d[('raspberrypi', 'polkitd(authority=local)')]) # dict{tuple:dict}
+    return alerts
 
-def get_all_services():
+def get_all_services() -> list:
+
     df =  pd.DataFrame(add_logs_to_database.get_logs_collection())
     appnames = df["appname"].unique()
     return list(appnames)
 
-def add_alerts_to_db(alerts) -> None:
-    
-    data_alerts = alerts
-
-    alerts_collection = get_collection("Alerts")
-
-    now = datetime.now()
-    last_update = {"last_update":now}
-    identified = {"identified":False}
-
-    for document in data_alerts:
-        temp_dct = {k: document[k] for k in document}
-
-        alerts_collection.update_one(
-            filter={
-                '_id': document['_id'],
-            },
-            update={
-                '$set': {**temp_dct, **last_update, **identified},
-            },
-            upsert=True,
-        )
-
-   
-def get_alerts_from_db() -> list[dict]:
-
-    alerts_collection = get_collection("Alerts")
-    return list(alerts_collection.find({}))
-
-
-
 if __name__ == "__main__":
+    
+    pass
+    # print([i for i in create_alerts()])
+    # add_alerts_to_db(create_alerts())
+    # print(get_alerts_from_db()[-2])
 
-    print([i for i in create_alerts()])
-    add_alerts_to_db(create_alerts())
-    print(get_alerts_from_db()[-2])
-
-    # print(get_all_services())
+    # df =  pd.DataFrame(add_logs_to_database.get_logs_collection())
+    # df['time'] = [d.time() for d in df['timestamp']]
+    # print(hist_maker(host="raspberrypi", app="systemd", df= df))
+    # print(create_alerts())

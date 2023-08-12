@@ -42,6 +42,28 @@ class Parser(object):
             if key not in parsed:
                 parsed[key] = ''
         return parsed.asDict()
+        
+        parsed = Parsed(parsed)
+        return parsed
+    
+    # Folders
+    # - models.py - Dataclasses
+    # - repository.py - Communication with the database
+    # - service.py - General logic
+
+    # @dataclass
+    # class Parsed:
+    #     timestamp: datetime
+    #     hostname: Host
+    #     appname: Appname
+    #     pid: Optional[int]
+    #     message: str
+
+    # parsed = {'timestamp': datetime.datetime(2023, 8, 12, 10, 43, 42), 
+    #           'hostname': 'raspberrypi', 
+    #           'appname': 'systemd', 
+    #           'pid': '1', 
+    #           'message': 'Finished Cleanup of Temporary Directories.'}
   
 
 def pyparse_logs():

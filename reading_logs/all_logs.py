@@ -1,5 +1,4 @@
-import pyparsing_logs
-import pyparsing_logs_network
+from reading_logs import pyparsing_logs, pyparsing_logs_network
 
 def get_logs():
     log1 =  pyparsing_logs.pyparse_logs()
@@ -10,7 +9,3 @@ def get_logs():
         log["_id"] = str(idx)
 
     return logs
-
-
-if __name__ == "__main__":
-    print(get_logs())

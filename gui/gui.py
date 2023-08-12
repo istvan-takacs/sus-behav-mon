@@ -2,22 +2,17 @@ import tkinter as tk
 from  tkinter import ttk
 from tkinter import messagebox, filedialog, scrolledtext
 import threading
-import sys
 import os
 import csv
-sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/storing_logs')
-sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/handling_logs')
-from add_logs_to_database import get_collection, set_logs_collection
-import check_log
+from storing_logs.add_logs_to_database import get_collection, set_logs_collection, set_alerts_collection
+from handling_logs import check_log
 import queue
-import handling_logs
-import mongo_connect
-import pymongo
+from handling_logs.handling_logs import get_all_services, create_alerts
 import datetime
 from datetime import datetime
 import time
 
-class Gui(tk.Tk):
+class Gui(tk.Tk):  
     def __init__(self, *args, **kwargs) -> None:
         tk.Tk.__init__(self, *args, **kwargs)
 
@@ -32,6 +27,8 @@ class Gui(tk.Tk):
         self.blacklisted_app_list = []
         self.existing_entries = set()
         self.connect_to_collections()
+        set_alerts_collection(create_alerts())
+
 
         # Create all tabs,  all frames and set up the all pages
         self.create_tabs()
@@ -75,7 +72,6 @@ class Gui(tk.Tk):
     def add_from_db_to_logs(self):
         
         while True:
-            self.connect_to_collections()
             set_logs_collection()
             data = list(self.logs_collection.find({}))
             self.add_to_logs(data)
@@ -263,8 +259,6 @@ class Gui(tk.Tk):
                 self.existing_entries.add(to_insert)
                 index += 1
 
-
-
     def create_outlay_alerts(self):
 
         table_scroll_v = tk.Scrollbar(self.table_frame_alerts)
@@ -290,14 +284,12 @@ class Gui(tk.Tk):
                 self.my_data_alerts.column(col, anchor="center", width=200)
             else:
                 self.my_data_alerts.column(col, anchor="center", width= 110)
-        
 
         #Create Headings 
         self.my_data_alerts.heading("#0",text="",anchor="center")
         headings = ["Index", "Alert", "Probability of occurrence", "Timestamp", "Hostname", "Service", "Process ID", "Message"]
         for idx, col in enumerate(self.my_data_alerts['columns']):
             self.my_data_alerts.heading(col,text=headings[idx],anchor="center")    
-        
 
         # Buttons
         select_all_button = tk.Button(self.table_frame_alerts_buttons,text="Select all", command=lambda: self.select_all(self.my_data_alerts))
@@ -322,8 +314,8 @@ class Gui(tk.Tk):
         
         # Label and selected items display
         label = tk.Label(self.table_frame_config,
-                        text="Select the actions/services that you would like to report as suspicious:",
-                        padx=10, pady=10)
+                         text="Select the actions/services that you would like to report as suspicious:",
+                         padx=10, pady=10)
         label.pack(side="left")
         
         self.strvar = tk.StringVar()
@@ -332,11 +324,11 @@ class Gui(tk.Tk):
         
         # Listbox
         service_listbox = tk.Listbox(self.table_frame_config, selectmode="multiple", yscrollcommand=yscrollbar.set)
-        service_listbox.pack(expand=True, fill="both", padx = 50)
+        service_listbox.pack(expand=True, fill="both", padx=50)
         yscrollbar.config(command=service_listbox.yview)
         
         # Populate listbox with services
-        services = handling_logs.get_all_services()
+        services = get_all_services()
         for service in services:
             service_listbox.insert("end", service)
         
@@ -349,7 +341,6 @@ class Gui(tk.Tk):
                         padx=10, pady=10)
         label_prob.pack(side="left")
 
-
         self.intvar = tk.IntVar()
         self.intvar.set(10)
         prob_label = tk.Label(self.table_frame_config_probability, textvariable=self.intvar)
@@ -361,6 +352,7 @@ class Gui(tk.Tk):
         button_prob = tk.Button(self.table_frame_config_probability, text="Confirm threshold", command=lambda: self.change_threshold(enty_prob, self.intvar))
         button_prob.pack(side="left", padx=10)
     
+
     def  create_outlay_doc(self):
         # text_box = tk.Text(self.table_frame_doc, height = 5, width = 52)
         # documentation = "kaka"
@@ -383,7 +375,6 @@ class Gui(tk.Tk):
 
         # Making the text read only
         text_area.configure(state ='disabled')
-
     
     def change_threshold(self, entry, intvar):
         
@@ -400,16 +391,12 @@ class Gui(tk.Tk):
         except ValueError:
             messagebox.showerror("Invalid input", "Please enter an integer number between 0 and 100.")
 
-
-
     def get_selected_services(self, strvar, service_listbox):
         self.blacklisted_app_list = [service_listbox.get(i) for i in service_listbox.curselection()]
         strvar.set(", ".join(self.blacklisted_app_list))
         self.event.set()
         self.tail_logs()
 
-
-        
     def create_tabs(self):
         tabControl = ttk.Notebook(self)
         self.dashboard_tab = ttk.Frame(tabControl)
@@ -425,7 +412,6 @@ class Gui(tk.Tk):
         tabControl.add(self.documentation_tab, text ='Documentation')
 
         tabControl.pack(expand = 1, fill ="both")
-
 
     def create_frames(self):
         #Logs tab Frames

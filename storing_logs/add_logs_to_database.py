@@ -1,8 +1,7 @@
-import sys
-sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/reading_logs/')
-import all_logs
-import mongo_connect
+from reading_logs import all_logs
+from storing_logs import mongo_connect
 from pymongo import collection
+from datetime import datetime
 
 def get_collection(clt: str) -> collection:
     # Get a client connection to the MongoDB database.
@@ -33,6 +32,25 @@ def set_logs_collection(clt: str = "Logs")-> None:
     data_all_logs = all_logs.get_logs()
     insert_into_collection(data_all_logs, clt)
 
+def set_alerts_collection(alerts: list[dict], clt: str = "Alerts") -> None:
+    
+    data_alerts = alerts
+    alerts_collection = get_collection(clt)
+
+    identified = {"identified":False}
+
+    for document in data_alerts:
+        temp_dct = {k: document[k] for k in document}
+        alerts_collection.update_one(
+            filter={
+                '_id': document['_id'],
+            },
+            update={
+                '$set': {**temp_dct,**identified},
+            },
+            upsert=True
+        )
+
 def get_logs_collection(clt:str = "Logs") -> list[dict]:
 
     # Load in collections.
@@ -43,7 +61,7 @@ def get_logs_collection(clt:str = "Logs") -> list[dict]:
     return cursor
 
 if __name__ == "__main__":
-    pass
+    
     # log_clt = get_collection("Logs")
     
     # print(">> Documents in the \"Logs\" collection:")
@@ -54,4 +72,4 @@ if __name__ == "__main__":
     # print(list(log_clt.find({
     #     'hostname': 'istvan-HP-ProBook-650-G1'
     # }))[-1])
-    print(type(get_collection("test")))
+    print(get_logs_collection("Alerts"))

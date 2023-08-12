@@ -1,20 +1,18 @@
-import sys
-sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/handling_logs/')
-sys.path.insert(0, '/home/istvan/Desktop/sus-behav-mon/reading_logs/')
-import pyparsing_logs
-import handling_logs
-from add_logs_to_database import get_collection
 import subprocess
 import threading
 import syslog
 import time
 import select
 import queue
+import threading
+import numpy as np
+from reading_logs import pyparsing_logs
+from storing_logs.add_logs_to_database import get_collection, get_logs_collection
+
 
 
 # Tail logs on thread
-
-def log_tailer(queue, event, app_list = [], threshold=0.1) -> None:
+def log_tailer(queue: queue, event: threading.Event, app_list: list = [], threshold: float = 0.1) -> None:
     f = subprocess.Popen(['tail', '-F', "-n" "5", "/var/log/syslog"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     p = select.poll()
     p.register(f.stdout)
@@ -26,15 +24,8 @@ def log_tailer(queue, event, app_list = [], threshold=0.1) -> None:
         if p.poll(1):
             output = f.stdout.readline().strip()
             parsed_output = pyparsing_logs.pyparse_tail_logs(output)
-            if is_identified == "Safe":
-                parsed_output["alert"] = False
-            elif parsed_output.get("appname") in app_list:
-                parsed_output["alert"] = True
-            elif suspicious(parsed_output) < threshold or is_identified(parsed_output) == True:
-                parsed_output["alert"] = True
-            else:
-                parsed_output["alert"] = False
-            parsed_output["probability"] = suspicious(parsed_output)
+            
+            parsed_output = set_log_fields(parsed_output, app_list, threshold)
 
             # Check if the parsed_output already exists in existing_entries
             key = (parsed_output["timestamp"], parsed_output["hostname"], parsed_output["appname"], parsed_output["pid"], parsed_output["message"])
@@ -44,41 +35,43 @@ def log_tailer(queue, event, app_list = [], threshold=0.1) -> None:
             time.sleep(1)
 
 
+def set_log_fields(parsed_log: dict, app_list: list = [], threshold: float = 0.1) -> dict:
 
-def time_period(hr: int) -> str:
-    """
-    (all incl.)
+    if is_identified == "Safe":
+        parsed_log["alert"] = False
+    elif parsed_log.get("appname") in app_list:
+        parsed_log["alert"] = True
+    elif suspicious(parsed_log) < threshold or is_identified(parsed_log) == True:
+        parsed_log["alert"] = True
+    else:
+        parsed_log["alert"] = False
+    parsed_log["probability"] = suspicious(parsed_log)
 
-    Morning: 0-5 
-    Beforenoon: 6-11
-    Afternooon: 12-17
-    Evening: 18-24
-    """
-    lst = [int(i) for i in range(0, 24)]
-    dct_morning = {str(k): "morning" for k in lst if k < 6}
-    dct_beforenoon = {str(k): "beforenoon" for k in lst if k > 5 and k < 12 }
-    dct_afternoon = {str(k): "afternoon" for k in lst if k > 11 and k < 18}
-    dct_evening = {str(k): "evening" for k in lst if k > 17 and k < 24}
-    merged = {**dct_morning, **dct_beforenoon, **dct_afternoon, **dct_evening}
-    return merged.get(str(hr))
+    return parsed_log
 
 
 # check if suspicios
-def suspicious(some_parsed_log) -> float:
+def suspicious(some_parsed_log: dict) -> float:
 
-    prob_table = handling_logs.get_alerts_from_db()
-    
+    prob_table = get_logs_collection("Alerts")
     host_to_check = some_parsed_log.get("hostname")
     app_to_check = some_parsed_log.get("appname")
-    time_to_check = str(some_parsed_log.get("timestamp").hour)
-    time_period_to_check = time_period(int(time_to_check))
+    time_to_check = int(some_parsed_log.get("timestamp").hour)
 
     for dct in prob_table:
         if dct.get("hostname") == host_to_check and dct.get("appname") == app_to_check:
-            return round(dct.get("probability").get(time_period_to_check), 2)
+            number_of_intervals = len(dct.get("probability"))-24
+            interval_bin_edges = np.linspace(0, 23, number_of_intervals, dtype=int)
+            for bin_edge in interval_bin_edges[1:]:
+                if time_to_check <= bin_edge:
+                    index = (np.where(interval_bin_edges == bin_edge)[0])[0]
+                    key = f"Interval {index}"
+                    probability = round(dct.get("probability").get(key), 2)
+                    return probability
+    # The host never called this service before
+    return 0        
 
-
-def is_identified(parsed_obj):
+def is_identified(parsed_obj) -> bool | str:
     
     alerts_collection = get_collection("Alerts")
 
@@ -88,26 +81,7 @@ def is_identified(parsed_obj):
         "appname":app
     }, {"identified":1,
         "_id":0})
-    return list(x)[0]["identified"] # To get only the boolean
-    
-        
-
-                
-if __name__ == "__main__":
-
-    def append_log(): # FOR TESTING
-
-        while True:
-            syslog.syslog("This should show up in the logs")
-            time.sleep(1)
-
-    event = threading.Event()
-    queue = queue.Queue()
-    app_list = ['rtkit-daemon', 'goa-daemon', 'xbrlapi.desktop', "systemd"]
-    x = threading.Thread(target=log_tailer, args=(queue, event, app_list, ),  daemon=True)
-    x.start()
-    # while True:
-    print(queue.get())
-    time.sleep(3)
-    event.set()
-    
+    # If not in collection return False
+    if not list(x):
+        return False
+    return list(x)[0]["identified"] # To get only the relevant field
