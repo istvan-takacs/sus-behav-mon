@@ -1,6 +1,7 @@
 import pymongo
 import unittest
 from add_logs_to_database import get_collection, insert_into_collection, set_logs_collection, get_logs_collection, set_alerts_collection
+import mongo_connect
 from reading_logs.all_logs import get_logs
 
 
@@ -53,8 +54,14 @@ class TestDatabaseFunctions(unittest.TestCase):
         """
         Test method verifying set_logs_collection function
         """
-
-        test_clt = get_collection("test")
+        # Get a client connection to the MongoDB database
+        client = mongo_connect.get_client()
+        # Create a connection to the database
+        db = client[mongo_connect.get_database_name()]
+        test_clt = db["test"]
+        # Test whether the exception handling in the function works as expected
+        with self.assertRaises(pymongo.errors.OperationFailure):
+            db.validate_collection("test")
         # Loads all of the syslog data into the test collection
         set_logs_collection(clt="test")
 

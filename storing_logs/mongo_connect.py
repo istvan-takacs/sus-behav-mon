@@ -7,11 +7,10 @@ def get_client():
     A function to get a MongoDB client connection.
 
     """
-
     server = os.getenv('MONGODB_SERVER', 'localhost')
     client = pymongo.MongoClient(host=server,port=27017)
 
-    # Test the connection to see if it is valid.
+    # Test the connection to see if it is valid
     try:
         client.server_info()
     except pymongo.errors.ServerSelectionTimeoutError:

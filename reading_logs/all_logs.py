@@ -1,6 +1,9 @@
 from reading_logs import pyparsing_logs, pyparsing_logs_network
 
 def get_logs():
+    """
+    Function to concatenate output from all parsed log files
+    """
     log1 =  pyparsing_logs.pyparse_logs()
     log2 = pyparsing_logs_network.pyparse_logs()
     logs = log1 + log2
