@@ -9,7 +9,7 @@ from reading_logs import pyparsing_logs
 from storing_logs.add_logs_to_database import get_collection, get_logs_collection
 
 
-def log_tailer(queue: queue, event: threading.Event, app_list: list = [], threshold: float = 0.1) -> None:
+def log_tailer(queue: queue.Queue, event: threading.Event, app_list: list = [], threshold: float = 0.1) -> None:
     """
     Function to tail, parse, and analyse the logs of the system created to run on a thread
     """

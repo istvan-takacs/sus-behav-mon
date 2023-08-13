@@ -33,7 +33,6 @@ class Gui(tk.Tk):
         set_logs_collection()
         set_alerts_collection(create_alerts())
 
-
         # Create tabs, frames and set up the pages
         self.create_tabs()
         self.create_frames()

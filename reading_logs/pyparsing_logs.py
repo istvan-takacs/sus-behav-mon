@@ -46,8 +46,8 @@ class Parser(object):
             if key not in parsed:
                 parsed[key] = ''
         return parsed.asDict()
-        
-    
+
+
 
 def pyparse_logs():
   """
